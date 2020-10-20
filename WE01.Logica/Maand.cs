@@ -43,12 +43,12 @@ namespace WE01.Logica
         }
 
 
-        private Dictionary<int, List<string>> data;
+        private Dictionary<int, List<string>> agenda;
 
         public Maand()
         {
             // voor elke dag in de week een lijn in de dictionary klaarzetten met een lege lijst van strings
-            data = new Dictionary<int, List<string>>();
+            agenda = new Dictionary<int, List<string>>();
 
             foreach (DayOfWeek dag in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -57,12 +57,12 @@ namespace WE01.Logica
                 // waardoor maandag = 0 (i.p.v. 1), dinsdag = 1 (i.p.v. 2), ...
                 if (dag == DayOfWeek.Sunday)
                 {
-                    data.Add(6, new List<string>());
+                    agenda.Add(6, new List<string>());
                 }
                 else
                 {
                     // enums hebben achterliggen een int-waarde, dus je kan zonder problemen casten
-                    data.Add((int) dag - 1, new List<string>());
+                    agenda.Add((int) dag - 1, new List<string>());
                 }
             }
         }
@@ -80,8 +80,9 @@ namespace WE01.Logica
             for (int i = 0; i < weekdag; i++)
             {
                 // maand begint niet op maandag, dus lege plaatsen invoegen op dagen vóór de begindag van de maand
-                List<string> dd = data.GetValueOrDefault(i);
-                dd.Add(string.Empty);
+                //List<string> dd = agenda.GetValueOrDefault(i);
+                //dd.Add(string.Empty);
+                agenda.GetValueOrDefault(i).Add(string.Empty);
             }
 
             // elke dag in deze maand aflopen            
@@ -89,19 +90,20 @@ namespace WE01.Logica
             {
                 weekdag = (datum.DayOfWeek == DayOfWeek.Sunday) ? 6 : (int)datum.DayOfWeek - 1;
                 // alle dagen voor deze weekdag opvragen & huidige dag toevoegen
-                List<string> dd = data.GetValueOrDefault(weekdag);
+                List<string> dd = agenda.GetValueOrDefault(weekdag);
                 dd.Add(datum.ToString("dd"));
                 datum = datum.AddDays(1);
+      
             }
 
             // "kalender" opbouwen met stringbuilder
-            stringBuilder.AppendLine("ma\t" + string.Join("\t", data.GetValueOrDefault(0)));
-            stringBuilder.AppendLine("di\t" + string.Join("\t", data.GetValueOrDefault(1)));
-            stringBuilder.AppendLine("wo\t" + string.Join("\t", data.GetValueOrDefault(2)));
-            stringBuilder.AppendLine("do\t" + string.Join("\t", data.GetValueOrDefault(3)));
-            stringBuilder.AppendLine("vr\t" + string.Join("\t", data.GetValueOrDefault(4)));
-            stringBuilder.AppendLine("za\t" + string.Join("\t", data.GetValueOrDefault(5)));
-            stringBuilder.AppendLine("zo\t" + string.Join("\t", data.GetValueOrDefault(6)));
+            stringBuilder.AppendLine("ma\t" + string.Join("\t", agenda.GetValueOrDefault(0)));
+            stringBuilder.AppendLine("di\t" + string.Join("\t", agenda.GetValueOrDefault(1)));
+            stringBuilder.AppendLine("wo\t" + string.Join("\t", agenda.GetValueOrDefault(2)));
+            stringBuilder.AppendLine("do\t" + string.Join("\t", agenda.GetValueOrDefault(3)));
+            stringBuilder.AppendLine("vr\t" + string.Join("\t", agenda.GetValueOrDefault(4)));
+            stringBuilder.AppendLine("za\t" + string.Join("\t", agenda.GetValueOrDefault(5)));
+            stringBuilder.AppendLine("zo\t" + string.Join("\t", agenda.GetValueOrDefault(6)));
 
             return stringBuilder.ToString();
         }
